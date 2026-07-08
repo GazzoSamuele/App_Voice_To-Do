@@ -9,13 +9,13 @@
 - [x] Configurare TypeScript (frontend e backend)
 - [x] Strutturare le cartelle del progetto (`/client`, `/server`)
 - [x] Configurare la connessione a MongoDB (Atlas, db `voice_todo`)
-- [ ] Commit iniziale + repo su GitHub
+- [x] Commit iniziale + repo su GitHub
 
 ## 🎙️ Prima fetta di trascrizione vocale
-- [ ] Integrare la Web Speech API (nativa del browser, gratuita)
-- [ ] Bottone registrazione: tieni premuto → parla → rilascia
-- [ ] Conversione audio → testo in tempo reale a schermo
-- [ ] Gestione errori microfono / browser non supportato
+- [x] Integrare la Web Speech API (nativa del browser, gratuita)
+- [x] Bottone registrazione (interruttore Parla/Stop) — _rifinitura "tieni premuto" opzionale, da valutare_
+- [x] Conversione audio → testo in tempo reale a schermo
+- [x] Gestione errori microfono / browser non supportato
 
 ## 📝 Task minime (per chiudere il giro)
 - [ ] Creare una task dal testo trascritto (modificabile prima di salvare)
