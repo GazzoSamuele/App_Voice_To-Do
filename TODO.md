@@ -25,7 +25,14 @@
 - [x] C. Bozza modificabile dalla trascrizione → salvataggio "ufficiale" (POST)
 - [x] D. Pannello laterale: lista + cancella + checkbox completa + **modifica testo con modale** (fatta a mano) ✅
 ### Integrazione
-- [ ] E. Google Calendar reale (OAuth Google + Calendar API) — pezzo grosso, per ultimo
+- [x] ~~E. Google Calendar / OAuth~~ → ABBANDONATO (pivot: vedi sotto)
+
+## 🧭 PIVOT — raccoglitore di pensieri (focus: ritrovare, non pianificare)
+- [x] Ricerca tra i pensieri (barra, case-insensitive, live)
+- [x] Tag / categorie: modello + salvataggio (POST) + visualizzazione + datalist con suggerimenti
+  - [ ] ⏰ **DA FARE DOMANI MATTINA (09/07→10/07):** filtro per categoria. Stato: `<select>` abbozzato ma commentato in App.tsx (righe ~178-186) + stato `categorySelected` commentato (riga 37). Da sistemare: 1 solo select controllato con opzioni da `categorieEsistenti` (copiare la logica del datalist ma con `<option value={cat}>{cat}</option>`), + aggiungere la condizione categoria al `.filter` della lista (riga ~212): "filtro vuoto OPPURE task.categoria === categorySelected", combinata con && alla ricerca.
+- [ ] 📅 **IN CORSO:** Vista calendario/timeline con `react-calendar` come DIARIO (task per giorno via `createdAt`, non planner)
+- [ ] Assegnare categoria anche a task esistenti (input categoria nella modale di modifica)
 
 ---
 ### 🔜 Rimandato ai prossimi giorni (dal piano completo)
