@@ -17,10 +17,15 @@
 - [x] Conversione audio → testo in tempo reale a schermo
 - [x] Gestione errori microfono / browser non supportato
 
-## 📝 Task minime (per chiudere il giro)
-- [ ] Creare una task dal testo trascritto (modificabile prima di salvare)
-- [ ] Lista task del giorno con checkbox di completamento
-- [ ] Salvare le task su MongoDB
+## 📝 Task minime / Feature nuove (MongoDB + Google Calendar)
+### Backend
+- [x] A. Modello dati Mongoose (Task: testo, completata, data, timestamps)
+- [x] B. API CRUD (POST / GET / PUT / DELETE) + cors — testate end-to-end ✅
+### Frontend
+- [x] C. Bozza modificabile dalla trascrizione → salvataggio "ufficiale" (POST)
+- [ ] D. Pannello laterale: lista messaggi + cancella / modifica (GET/PUT/DELETE)
+### Integrazione
+- [ ] E. Google Calendar reale (OAuth Google + Calendar API) — pezzo grosso, per ultimo
 
 ---
 ### 🔜 Rimandato ai prossimi giorni (dal piano completo)

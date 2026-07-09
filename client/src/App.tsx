@@ -2,7 +2,7 @@ import { useState, useRef } from 'react'
 
 import './App.scss'
 
-// const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
 
 
 function App() {
@@ -15,9 +15,26 @@ function App() {
 
   // ricorda se stai registrando
   const [inAscolto, setInAscolto] = useState(false)
-
   const [errore, setErrore] = useState('')
   
+  const saveTask = async () => {
+  
+  if (!testo.trim()) 
+    return
+
+  const res = await fetch(`${API_URL}/api/tasks`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json'},
+    body: JSON.stringify({ testo })
+  })
+
+  if (!res.ok) {
+    alert('Errore nel salvataggio della task. Riprova')
+    return
+  }
+  setTesto("")
+}
+
 function avviaAscolto() {
   
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
@@ -64,7 +81,13 @@ function fermaAscolto() {
 
       {errore && <p className="errore">{errore}</p>}
 
-      <p>{testo}</p>
+      <textarea
+        value={testo}
+        onChange={(e) => setTesto(e.target.value)}
+      />
+
+      <button onClick={saveTask}>Salva ✅</button>
+
     </div>
   </div>
   
