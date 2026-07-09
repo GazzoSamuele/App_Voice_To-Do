@@ -16,6 +16,7 @@ router.post("/", async (req,res) => {
         const newTask = await Task.create({
             testo: req.body.testo,
             data: req.body.data,
+            categoria: req.body.categoria,
         })
         res.status(201).json(newTask)
     }   catch (err) {
