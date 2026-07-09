@@ -23,7 +23,8 @@
 - [x] B. API CRUD (POST / GET / PUT / DELETE) + cors — testate end-to-end ✅
 ### Frontend
 - [x] C. Bozza modificabile dalla trascrizione → salvataggio "ufficiale" (POST)
-- [ ] D. Pannello laterale: lista messaggi + cancella / modifica (GET/PUT/DELETE)
+- [~] D. Pannello laterale: lista + cancella + checkbox completa (fatti); modifica testo via `window.prompt` (in corso)
+  - [ ] 🔜 Sostituire il `window.prompt` con una **modale** dedicata per modificare la task
 ### Integrazione
 - [ ] E. Google Calendar reale (OAuth Google + Calendar API) — pezzo grosso, per ultimo
 
