@@ -1,38 +1,326 @@
+$background: #230c33;
+$element: #b27c66;
+$color1: #5c6f68;
+$color2: #cfdee7;
+$color3: #92b4f4;
+$text1: #ffffff;
 
-$radius: 12px;
-$radius-sm: 8px;
+$radius: 15px;
+$radius-sm: 10px;
 $gap: 16px;
-$maxw: 720px;
+$padding: 20px;
 
-main {
-  width: $maxw;
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 0 20px 60px;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+* {
+  box-sizing: border-box;
 }
 
-.cattura,
-.pannello {
-  background: var(--code-bg);
-  border: 1px solid var(--border);
+body {
+  margin: 0;
+  background-color: $color2;
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+  color: $background;
+}
+
+
+.pannello-cerca-categorie,
+.panel-task-salvate,
+.react-calendar,
+.alg-cattura-tasks,
+.alg-tasks-salvate {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14);
+}
+
+.modale {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.task {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.28);
+  }
+}
+
+button {
+  transition: filter 0.15s ease, transform 0.05s ease;
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+.alg-cattura-tasks aside {
+  align-self: stretch;
+
+  .riga {
+    margin: 0;
+  }
+
+  button {
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+}
+
+h1 {
+  margin: 0 0 8px;
+  font-size: 30px;
+  letter-spacing: -0.02em;
+}
+
+
+.lista-task,
+.alg-tasks-salvate ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+      align-items: flex-end;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 999px;
+  }
+}
+
+h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+
+#root {
+  display: flex;
+  gap: $gap;
+  align-items: stretch;
+  min-height: 100vh;
+  padding: $gap;
+}
+
+.alg-main {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+  flex: 2 1 0;      
+  min-width: 0;     
+  margin: 0;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+  flex: 1 1 0;      
+  min-width: 0;
+  width: auto;
+  margin: 0;
+  text-align: left;
+}
+
+.alg-panel-calendario {
+  display: flex;
+  gap: $gap;
+  min-height: 0;
+  flex: 0 0 auto; 
+}
+
+.pannello-cerca-categorie {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+  flex: 0 0 220px;   
+  min-width: 0;
+  padding: $padding;
   border-radius: $radius;
-  padding: 24px;
-  box-shadow: var(--shadow);
+  background-color: $color3;
+  color: $background;
+}
+
+.panel-task-salvate {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-width: 0;
+  padding: $padding;
+  background-color: $element;
+  border-radius: $radius;
+}
+
+.lista-task {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  overflow-y: auto;  
+  max-height: 340px;
+}
+
+.task {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border-radius: $radius-sm;
+  background: $background;
+  color: $text1;
+
+  .testo {
+    margin: 0;
+    color: $text1;
+    word-break: break-word;
+  }
+
+
+  &:has(input:checked) .testo {
+    text-decoration: line-through;
+    opacity: 0.5;
+  }
+}
+
+.categoria {
+  align-self: flex-start;
+  margin: 0;
+  font-size: 12px;
+  color: $text1;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  padding: 2px 10px;
+}
+
+.task-azioni {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+
+  label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: $text1;
+    cursor: pointer;
+  }
+}
+
+.react-calendar {
+  width: 100%;
+  border: none;
+  border-radius: $radius;
+  background: aliceblue;
+  padding: $padding;
+  display: flex;
+  flex-direction: column; 
+  flex: 1 1 auto;        
+  min-height: 0;
+}
+
+.react-calendar__navigation {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 0.5em;
+  flex: 0 0 auto; 
+}
+
+.react-calendar__viewContainer,
+.react-calendar__month-view,
+.react-calendar__month-view > * {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.react-calendar__month-view__weekdays {
+  flex: 0 0 auto;
+  flex-direction: row;
+}
+.react-calendar__year-view__months{
+  height: 100%;
+}
+.react-calendar__year-view{
+  height: 100%;
+}
+.react-calendar__month-view__days {
+  flex: 1 1 auto;
+  align-content: stretch;
+  border-radius: $radius-sm;
+  height: 100%;
+}
+
+.alg-cattura-tasks {
+  display: flex;
+  gap: $gap;
+  align-items: stretch;
+  padding: $padding;
+  background-color: $background;
+  color: $text1;
+  border-radius: $radius;
+
+  .cattura {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0;
+  }
+
+  aside {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+  }
 }
 
 .riga {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin-bottom: $gap;
 
   label {
     font-size: 14px;
-    color: var(--text);
+  }
+}
+
+.alg-tasks-salvate {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1 1 0;
+  padding: $padding;
+  background-color: $color1;
+  color: $text1;
+  border-radius: $radius;
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+
+    li {
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: $radius-sm;
+    }
   }
 }
 
@@ -42,16 +330,16 @@ select {
   width: 100%;
   box-sizing: border-box;
   font: inherit;
-  color: var(--text-h);
-  background: var(--bg);
-  border: 1px solid var(--border);
+  color: $background;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: $radius-sm;
   padding: 10px 12px;
 
   &:focus {
     outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-bg);
+    border-color: $color3;
+    box-shadow: 0 0 0 3px rgba(146, 180, 244, 0.5);
   }
 }
 
@@ -60,103 +348,42 @@ textarea {
   resize: vertical;
 }
 
-input[type='checkbox'] {
+input[type="checkbox"] {
   width: auto;
-  accent-color: var(--accent);
+}
+
+.errore {
+  color: #ffb4b4;
+  font-size: 14px;
+  margin: 0;
 }
 
 button {
   font: inherit;
   font-weight: 500;
   cursor: pointer;
-  border: 1px solid var(--border);
+  border: none;
   border-radius: $radius-sm;
-  padding: 10px 16px;
-  background: var(--bg);
-  color: var(--text-h);
-  transition: background 0.15s, border-color 0.15s, filter 0.15s;
+  padding: 8px 14px;
+  background: $color3;
+  color: $background;
+  transition: filter 0.15s;
 
   &:hover {
-    border-color: var(--accent);
+    filter: brightness(1.08);
   }
 }
 
-.cattura button {
-  background: var(--accent);
-  border-color: var(--accent);
+.cattura button,
+aside button {
+  background: $element;
   color: #fff;
-
-  &:hover {
-    filter: brightness(1.12);
-  }
-}
-
-.errore {
-  color: #e5484d;
-  font-size: 14px;
-  margin-bottom: $gap;
-}
-
-.lista-task {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.task {
-  border: 1px solid var(--border);
-  border-radius: $radius-sm;
-  padding: 14px 16px;
-  background: var(--bg);
-
-  .testo {
-    color: var(--text-h);
-    margin: 4px 0 10px;
-  }
-
-  &:has(input:checked) .testo {
-    text-decoration: line-through;
-    opacity: 0.5;
-  }
-}
-
-.categoria {
-  display: inline-block;
-  font-size: 12px;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 1px solid var(--accent-border);
-  border-radius: 999px;
-  padding: 2px 10px;
-}
-
-.task-azioni {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-
-  label {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 14px;
-    color: var(--text);
-    cursor: pointer;
-  }
-
-  button {
-    padding: 6px 12px;
-    font-size: 14px;
-  }
 }
 
 .modale-overlay {
   position: fixed;
   inset: 0;
+  z-index: 10;
   background: rgba(0, 0, 0, 0.55);
   display: flex;
   align-items: center;
@@ -165,21 +392,18 @@ button {
 }
 
 .modale {
-  background: var(--bg);
-  color: var(--text-h);
-  border: 1px solid var(--border);
-  padding: 24px;
-  border-radius: $radius;
-  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 420px;
   max-width: 100%;
-  box-shadow: var(--shadow);
+  padding: 24px;
+  background: $background;
+  color: $text1;
+  border-radius: $radius;
 
   h3 {
-    margin: 0 0 12px;
-  }
-
-  input {
-    margin-bottom: 16px;
+    margin: 0;
   }
 }
 
@@ -188,3 +412,43 @@ button {
   gap: 10px;
   justify-content: flex-end;
 }
+
+
+@media (max-width: 1000px) {
+  #root {
+    flex-direction: column;
+  }
+
+  .alg-main,
+  main {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  #root {
+    padding: 10px;
+  }
+
+  .alg-panel-calendario {
+    flex-direction: column;
+  }
+
+  .pannello-cerca-categorie {
+    flex: 1 1 auto;
+  }
+
+  .alg-cattura-tasks {
+    flex-direction: column;
+  }
+
+  .alg-cattura-tasks aside {
+    justify-content: flex-start;
+  }
+
+  .lista-task {
+    max-height: none;
+  }
+}
+

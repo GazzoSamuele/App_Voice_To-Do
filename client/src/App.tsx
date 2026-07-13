@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 
-// import Calendar from 'react-calendar'
-// import 'react-calendar/dist/Calendar.css'
+import Calendar from 'react-calendar'
+import 'react-calendar/dist/Calendar.css'
 
 import './App.scss'
 
@@ -14,6 +14,7 @@ interface Task {
   data?: string
   createdAt: string
   categoria?: string
+  daGestire?: boolean
 }
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
 
   // l'oggetto registratore
   const recognitionRef = useRef<SpeechRecognition | null>(null)
+
 
   // ricorda se stai registrando
   const [inAscolto, setInAscolto] = useState(false)
@@ -37,19 +39,24 @@ function App() {
   const [ricerca, setRicerca] = useState('')
 
   const [newCategory, setNewCategory] = useState('')
-  // const [categorySelected, setNewCategorySelected] = useState('')
+  const [categorySelected, setNewCategorySelected] = useState('')
 
-  // const [giornoSelezioanto, setGiornoSelezionato] = useState(new Date())
+  const [ordine, setOrdine] = useState<'recenti' | 'vecchie'>('recenti')
+
+  const [giornoSelezionato, setGiornoSelezionato] = useState(new Date())
+
+  const [modificaCategoria, setModificaCategoria] = useState('')
 
   const openEdit = (task: Task) => {
     setTaskInModifica(task)
     setTestoModifica(task.testo)
+    setModificaCategoria(task.categoria || '')
   }
   const closeEdit = () => setTaskInModifica(null)
 
   const saveEdit = async () => {
       if (!taskInModifica || !testoModifica.trim()) return
-        await updateTask(taskInModifica._id, { testo: testoModifica })
+        await updateTask(taskInModifica._id, { testo: testoModifica, categoria: modificaCategoria })
     closeEdit()
   }
 
@@ -152,6 +159,23 @@ function fermaAscolto() {
   recognitionRef.current?.stop()
 }
 
+function readingTask() {
+
+  if (!window.speechSynthesis) {
+        setErrore('Il tuo browser non supporta la trascrizione vocale. Usa Chrome o Edge.')
+      return
+    }
+
+  const frase = tasks.map((t) => t.testo).join('. ')
+
+  const lettura = new SpeechSynthesisUtterance(frase)
+
+  lettura.lang = "it-IT"
+
+  window.speechSynthesis.speak(lettura)
+
+}
+
 // estrai la categoria da ogni task (alcune saranno vuote/undefined)
 const tutteLeCategorie = tasks.map((t) => t.categoria)
 
@@ -163,101 +187,146 @@ const categorieEsistenti = [...new Set(senzaVuoti)]
 
   return (
     <>
-      <header>
+      {/* <header>
         <h1>🎙️ Voice To-Do</h1>
-      </header>
+      </header> */}
+    <section className='alg-main'>
+      <div className='alg-panel-calendario'>
+        <div className="pannello-cerca-categorie">
+            <h2>Le tue task</h2>
+              <div className="riga">
+                <label htmlFor="ricerca">Cerca</label>
+                <input
+                  id="ricerca"
+                  type="search"
+                  value={ricerca}
+                  onChange={(e) => setRicerca(e.target.value)}
+                />
+              </div>
+        
+            <select
+                value={categorySelected}
+                onChange={(e) => setNewCategorySelected(e.target.value)}
+            >
+              <option value="">Tutte le categorie</option>
+                {categorieEsistenti.map((cat) => (
+                  <option 
+                    key={cat}
+                    value={cat}
+                    >{cat}</option>
+                ))}
+            </select>
+        </div>
+          <div className='panel-task-salvate'>
+              <ul className="lista-task">
+                {tasks
+                  .filter((task) => {
+                    const matchTesto = task.testo.toLowerCase().includes(ricerca.toLowerCase())
+                    const matchCategoria = categorySelected === "" || task.categoria === categorySelected
+                    return matchTesto && matchCategoria
+                  })
+                  .map((task) => (
+                    <li key={task._id} className="task">
+                      <p className="testo">{task.testo}</p>
 
+                      {task.categoria && <p className="categoria">{task.categoria}</p>}
+                      <div className="task-azioni">
+                        <label>
+                          <input
+                            type="checkbox"
+                            checked={task.completata}
+                            onChange={() => updateTask(task._id, { completata: !task.completata })}
+                          />
+                          Completata
+                        </label>
+                        <button onClick={() => updateTask(task._id, { daGestire: false})}>Segna gestita</button>
+                        <button onClick={() => openEdit(task)}>✏️ Modifica</button>
+                        <button onClick={() => deleteTask(task._id)}>Elimina 🗑️</button>
+                      </div>
+                    </li>
+                  ))}
+              </ul>
+            </div>
+        </div>  
+      
+
+        <Calendar
+          className= "calendario" 
+          value={giornoSelezionato}
+          onChange={(value) => setGiornoSelezionato(value as Date)}/>
+        </section>
+        
       <main>
-        <section className="cattura">
-          <h2>Nuovo pensiero</h2>
+        <section className='alg-cattura-tasks'>
+          <div className="cattura">
+            <h2>Nuovo pensiero</h2>
 
-          <div className="riga">
-            <button onClick={inAscolto ? fermaAscolto : avviaAscolto}>
-              {inAscolto ? 'Stoppa la registrazione' : '🎤 Parla qua'}
-            </button>
+            {tasks.filter((task) => task.daGestire).length > 0 && (
+              <p>{tasks.filter((task) => task.daGestire).length} note da gestire</p>
+            )}
+
+            <div className="riga">
+              <label htmlFor="testo-task">Testo</label>
+              <textarea
+                id="testo-task"
+                value={testo}
+                onChange={(e) => setTesto(e.target.value)}
+              />
+            </div>
+
+            <div className="riga">
+              <label htmlFor="categoria-task">Categoria (scegline una o creane una nuova)</label>
+              <input
+                id="categoria-task"
+                value={newCategory}
+                list="categorie"
+                onChange={(e) => setNewCategory(e.target.value)}
+              />
+              
+              <datalist id="categorie">
+                {categorieEsistenti.map((cat) => (
+                  <option key={cat} value={cat} />
+                ))}
+              </datalist>
+            </div>
           </div>
 
-          {errore && <p className="errore">{errore}</p>}
+          <aside>
+            <div className="riga">
+              <button onClick={inAscolto ? fermaAscolto : avviaAscolto}>
+                {inAscolto ? 'Stoppa la registrazione' : '🎤 Parla qua'}
+              </button>
+            </div>
 
-          <div className="riga">
-            <label htmlFor="testo-task">Testo</label>
-            <textarea
-              id="testo-task"
-              value={testo}
-              onChange={(e) => setTesto(e.target.value)}
-            />
-          </div>
+            {errore && <p className="errore">{errore}</p>}
 
-          <div className="riga">
-            <label htmlFor="categoria-task">Categoria (scegline una o creane una nuova)</label>
-            <input
-              id="categoria-task"
-              value={newCategory}
-              list="categorie"
-              onChange={(e) => setNewCategory(e.target.value)}
-            />
-            <datalist id="categorie">
-              {categorieEsistenti.map((cat) => (
-                <option key={cat} value={cat} />
-              ))}
-            </datalist>
-          </div>
-
-          <div className="riga">
-            <button onClick={createTask}>Salva ✅</button>
-          </div>
+            <div className="riga">
+              <button onClick={createTask}>Salva ✅</button>
+            </div>
+          </aside>
         </section>
 
-        {/* {task.createdAt
-          <Calendar
-            value={giornoSelezioanto}
-            onChange={(value) => setGiornoSelezionato(value as Date)}
-          />
-        } */}
+          <div className='alg-tasks-salvate'>
+            <h2>Pensieri e idee del giorno</h2>
+            <ul>
+              <button onClick={() => setOrdine(ordine === 'recenti' ? 'vecchie' : 'recenti')}>Ordine Descrescente
+              </button>
+              {tasks.filter((task) => {
+                  const taskDaySelected = new Date(task.createdAt).toDateString() === giornoSelezionato.toDateString()
+                  return taskDaySelected
+                })
+                .sort((a, b) => {
+                  const diff = new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+                  return ordine === 'recenti' ? diff : -diff
+                })
+                .map((task) => (
+                  <li key={task._id}>{task.testo}</li>
+                ))}
+            </ul>
 
-        <aside className="pannello">
-          <h2>Le tue task</h2>
-
-          <div className="riga">
-            <label htmlFor="ricerca">Cerca</label>
-            <input
-              id="ricerca"
-              type="search"
-              value={ricerca}
-              onChange={(e) => setRicerca(e.target.value)}
-            />
+            <button onClick={readingTask}>Ascolta la task</button>
           </div>
-
-          {/* filtro per categoria (WIP — da riprendere):
-              un <select> controllato con opzioni da categorieEsistenti,
-              + condizione categoria nel .filter qui sotto */}
-
-          <ul className="lista-task">
-            {tasks
-              .filter((task) => task.testo.toLowerCase().includes(ricerca.toLowerCase()))
-              .map((task) => (
-                <li key={task._id} className="task">
-                  {task.categoria && <p className="categoria">{task.categoria}</p>}
-                  <p className="testo">{task.testo}</p>
-
-                  <div className="task-azioni">
-                    <label>
-                      <input
-                        type="checkbox"
-                        checked={task.completata}
-                        onChange={() => updateTask(task._id, { completata: !task.completata })}
-                      />
-                      Completata
-                    </label>
-                    <button onClick={() => openEdit(task)}>✏️ Modifica</button>
-                    <button onClick={() => deleteTask(task._id)}>Elimina 🗑️</button>
-                  </div>
-                </li>
-              ))}
-          </ul>
-        </aside>
-
-      </main>
+        </main>
 
       {taskInModifica && (
         <div className="modale-overlay" onClick={closeEdit}>
@@ -266,6 +335,11 @@ const categorieEsistenti = [...new Set(senzaVuoti)]
             <input
               value={testoModifica}
               onChange={(e) => setTestoModifica(e.target.value)}
+            />
+            <input
+              value={modificaCategoria}
+              list="categorie"
+              onChange={(e) => setModificaCategoria(e.target.value)}
             />
             <div className="modale-azioni">
               <button onClick={saveEdit}>Salva</button>

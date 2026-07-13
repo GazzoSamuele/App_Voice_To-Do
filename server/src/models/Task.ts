@@ -5,6 +5,8 @@ interface ITask {
     completata: boolean;
     data?: Date;
     categoria?: string;
+    daGestire: boolean;
+    statOrdine: 'recenti' | 'vecchie';
 }
 
 const taskSchema = new mongoose.Schema<ITask>({
@@ -12,6 +14,13 @@ const taskSchema = new mongoose.Schema<ITask>({
     completata: { type: Boolean, default: false },
     data: { type: Date },
     categoria: { type: String },
+    daGestire: { type: Boolean, default: true },
+    statOrdine: {
+        type: String,
+        enum: ['recenti', 'vecchie'],
+        default: 'recenti',
+        required: true
+    },
     
 // aggiunge in automatico createdAt e updatedAt
 }, { timestamps: true})
