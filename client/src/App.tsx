@@ -185,6 +185,11 @@ const senzaVuoti = tutteLeCategorie.filter((c) => c)
 // togli i doppioni
 const categorieEsistenti = [...new Set(senzaVuoti)]
 
+const taskVisibili = tasks.filter((task) => {
+const matchTesto = task.testo.toLowerCase().includes(ricerca.toLowerCase())
+const matchCategoria = categorySelected === "" || task.categoria === categorySelected
+  return matchTesto && matchCategoria
+})
   return (
     <>
       {/* <header>
@@ -193,6 +198,7 @@ const categorieEsistenti = [...new Set(senzaVuoti)]
     <section className='alg-main'>
       <div className='alg-panel-calendario'>
         <div className="pannello-cerca-categorie">
+          <span className="eyebrow">Archivio</span>
             <h2>Le tue task</h2>
               <div className="riga">
                 <label htmlFor="ricerca">Cerca</label>
@@ -216,16 +222,18 @@ const categorieEsistenti = [...new Set(senzaVuoti)]
                     >{cat}</option>
                 ))}
             </select>
+
+            <div className="conta-task">
+              <strong>{taskVisibili.length}</strong> task visibili
+            </div>
         </div>
           <div className='panel-task-salvate'>
+            <div className="panel-header">
+              <span className="eyebrow">Salvate</span>
+              <span className="badge-count">{taskVisibili.length}</span>
+            </div>
               <ul className="lista-task">
-                {tasks
-                  .filter((task) => {
-                    const matchTesto = task.testo.toLowerCase().includes(ricerca.toLowerCase())
-                    const matchCategoria = categorySelected === "" || task.categoria === categorySelected
-                    return matchTesto && matchCategoria
-                  })
-                  .map((task) => (
+                {taskVisibili.map((task) => (
                     <li key={task._id} className="task">
                       <p className="testo">{task.testo}</p>
 
@@ -259,6 +267,7 @@ const categorieEsistenti = [...new Set(senzaVuoti)]
       <main>
         <section className='alg-cattura-tasks'>
           <div className="cattura">
+            <span className="eyebrow">Cattura</span>
             <h2>Nuovo pensiero</h2>
 
             {tasks.filter((task) => task.daGestire).length > 0 && (
@@ -280,6 +289,7 @@ const categorieEsistenti = [...new Set(senzaVuoti)]
                 id="categoria-task"
                 value={newCategory}
                 list="categorie"
+                placeholder='Non è obbligatoria, può rimanere un pensiero libero'
                 onChange={(e) => setNewCategory(e.target.value)}
               />
               
@@ -293,15 +303,18 @@ const categorieEsistenti = [...new Set(senzaVuoti)]
 
           <aside>
             <div className="riga">
-              <button onClick={inAscolto ? fermaAscolto : avviaAscolto}>
-                {inAscolto ? 'Stoppa la registrazione' : '🎤 Parla qua'}
+              <button
+                className={inAscolto ? 'registrando' : ''}
+                onClick={inAscolto ? fermaAscolto : avviaAscolto}
+              >
+                {inAscolto ? 'Stoppa registrazione' : 'Parla qua'}
               </button>
             </div>
 
             {errore && <p className="errore">{errore}</p>}
 
             <div className="riga">
-              <button onClick={createTask}>Salva ✅</button>
+              <button className='salva-task-ascoltata' onClick={createTask}>Salva</button>
             </div>
           </aside>
         </section>
@@ -309,8 +322,7 @@ const categorieEsistenti = [...new Set(senzaVuoti)]
           <div className='alg-tasks-salvate'>
             <h2>Pensieri e idee del giorno</h2>
             <ul>
-              <button onClick={() => setOrdine(ordine === 'recenti' ? 'vecchie' : 'recenti')}>Ordine Descrescente
-              </button>
+              {/* <button onClick={() => setOrdine(ordine === 'recenti' ? 'vecchie' : 'recenti')}>Ordine Descrescente</button> */}
               {tasks.filter((task) => {
                   const taskDaySelected = new Date(task.createdAt).toDateString() === giornoSelezionato.toDateString()
                   return taskDaySelected
@@ -324,7 +336,13 @@ const categorieEsistenti = [...new Set(senzaVuoti)]
                 ))}
             </ul>
 
-            <button onClick={readingTask}>Ascolta la task</button>
+            <div className="chat-actions">
+              <button onClick={() => setOrdine(ordine === 'recenti' ? 'vecchie' : 'recenti')}>
+                {ordine === 'recenti' ? 'Più recenti' : 'Più vecchie'}
+              </button>
+              <button onClick={readingTask}>Ascolta</button>
+            </div>
+
           </div>
         </main>
 
