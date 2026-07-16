@@ -9,16 +9,13 @@ import express from "express"
 const app = express()
 //MIDDLEWARE
 
-// aggiunge gli header che autorizzano il browser su localhost:5173 a chiamare il server su localhost:3000
 app.use(cors())
 
-// legge il corpo (body) JSON delle richieste in arrivo e lo mette in req.body. 
-// Senza questo, quando il client invia una task, req.body è undefined
 app.use(express.json())
 
 app.use("/api/tasks", tasksRouter)
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 3000
 const MONGODB_URI = process.env.MONGODB_URI
 
 if (!MONGODB_URI) {
