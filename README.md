@@ -8,13 +8,13 @@ App full-stack che trasforma la voce in appunti. Non è un'agenda con scadenze: 
 
 ## 🔗 Demo live
 
-### 👉 **(https://INSERISCI-QUI-URL-VERCEL.vercel.app)**
+<!-- ### 👉 **(https://INSERISCI-QUI-URL-VERCEL.vercel.app)** -->
 
 ---
 
 ## 📸 Screenshot
 
-(client/img/screen-dashboard.png)
+<img src="client/img/screen-dashboard.png" alt="Dashboard completa con tutte le funzionalità" width="800">
 
 
 ---
