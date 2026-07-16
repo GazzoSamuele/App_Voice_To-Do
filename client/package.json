@@ -12,6 +12,7 @@
   "dependencies": {
     "react": "^19.2.7",
     "react-calendar": "^6.0.1",
+    "react-clock": "^6.0.0",
     "react-dom": "^19.2.7"
   },
   "devDependencies": {

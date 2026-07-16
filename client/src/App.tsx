@@ -3,6 +3,9 @@ import { useState, useRef, useEffect } from 'react'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 
+import Clock from 'react-clock'
+import 'react-clock/dist/Clock.css'
+
 import './App.scss'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
@@ -11,7 +14,7 @@ interface Task {
   _id: string
   testo: string
   completata: boolean
-  data?: string
+  data?: string | null
   createdAt: string
   categoria?: string
   daGestire?: boolean
@@ -32,6 +35,7 @@ function App() {
   const [errore, setErrore] = useState('')
 
   const [tasks, setTasks] = useState<Task[]>([])
+  const [inPausa, setInPausa] = useState(false)
 
   const [taskInModifica, setTaskInModifica] = useState<Task | null>(null)
   const [testoModifica, setTestoModifica] = useState('')
@@ -47,7 +51,14 @@ function App() {
 
   const [modificaCategoria, setModificaCategoria] = useState('')
 
+  const [ora, setOra] = useState(new Date())
+
+  const [dataModifica, setDataModifica] = useState('')
+
+  const [modaleCattura, setModaleCattura] = useState(false)
+
   const openEdit = (task: Task) => {
+    setDataModifica(task.data ? task.data.slice(0, 10) : '')
     setTaskInModifica(task)
     setTestoModifica(task.testo)
     setModificaCategoria(task.categoria || '')
@@ -56,7 +67,7 @@ function App() {
 
   const saveEdit = async () => {
       if (!taskInModifica || !testoModifica.trim()) return
-        await updateTask(taskInModifica._id, { testo: testoModifica, categoria: modificaCategoria })
+        await updateTask(taskInModifica._id, { testo: testoModifica, categoria: modificaCategoria, data: dataModifica || null, })
     closeEdit()
   }
 
@@ -81,6 +92,7 @@ function App() {
   setTesto("")
   setNewCategory("")
   downloadTask()
+  setModaleCattura(false)
 }
 
 // delete task
@@ -122,6 +134,32 @@ useEffect(() => {
   downloadTask()
 }, [])
 
+useEffect(() => {
+  const timer = setInterval(() => setOra(new Date()), 1000)
+  return () => clearInterval(timer)
+}, [])
+
+useEffect(() => {
+  function onKeyDown(e: KeyboardEvent) {
+    const tag = (e.target as HTMLElement).tagName
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return
+
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault()
+
+      if (inAscolto) {
+        fermaAscolto()
+      } else {
+        setModaleCattura(true)
+        avviaAscolto()
+      }
+    }
+  }
+
+  window.addEventListener('keydown', onKeyDown)
+  return () => window.removeEventListener('keydown', onKeyDown)
+}, [inAscolto])
+
 
 function avviaAscolto() {
 
@@ -161,6 +199,9 @@ function fermaAscolto() {
 
 function readingTask() {
 
+  window.speechSynthesis.cancel()   
+  setInPausa(false)
+
   if (!window.speechSynthesis) {
         setErrore('Il tuo browser non supporta la trascrizione vocale. Usa Chrome o Edge.')
       return
@@ -174,6 +215,16 @@ function readingTask() {
 
   window.speechSynthesis.speak(lettura)
 
+}
+
+function togglePausa() {
+  if (window.speechSynthesis.paused) {
+    window.speechSynthesis.resume()
+    setInPausa(false)
+  } else {
+    window.speechSynthesis.pause()
+    setInPausa(true)
+  }
 }
 
 // estrai la categoria da ogni task (alcune saranno vuote/undefined)
@@ -192,13 +243,18 @@ const matchCategoria = categorySelected === "" || task.categoria === categorySel
 })
   return (
     <>
-      {/* <header>
-        <h1>🎙️ Voice To-Do</h1>
-      </header> */}
+
+    <datalist id="categorie">
+        {categorieEsistenti.map((cat) => (
+          <option key={cat} value={cat} />
+        ))}
+      </datalist>
+
     <section className='alg-main'>
       <div className='alg-panel-calendario'>
         <div className="pannello-cerca-categorie">
-          <span className="eyebrow">Archivio</span>
+
+          <Clock value={ora} size={190} renderNumbers={true} />
             <h2>Le tue task</h2>
               <div className="riga">
                 <label htmlFor="ricerca">Cerca</label>
@@ -209,35 +265,40 @@ const matchCategoria = categorySelected === "" || task.categoria === categorySel
                   onChange={(e) => setRicerca(e.target.value)}
                 />
               </div>
-        
-            <select
-                value={categorySelected}
-                onChange={(e) => setNewCategorySelected(e.target.value)}
-            >
-              <option value="">Tutte le categorie</option>
-                {categorieEsistenti.map((cat) => (
-                  <option 
-                    key={cat}
-                    value={cat}
-                    >{cat}</option>
-                ))}
-            </select>
+            
+                <select
+                    value={categorySelected}
+                    onChange={(e) => setNewCategorySelected(e.target.value)}
+                >
+                  <option value="">Tutte le categorie</option>
+                    {categorieEsistenti.map((cat) => (
+                      <option 
+                        key={cat}
+                        value={cat}
+                        >{cat}</option>
+                    ))}
+                </select>
 
-            <div className="conta-task">
-              <strong>{taskVisibili.length}</strong> task visibili
-            </div>
-        </div>
+                <div className="conta-task">
+                  <strong>{taskVisibili.length}</strong> task totali
+                </div>
+              </div>
+
           <div className='panel-task-salvate'>
-            <div className="panel-header">
-              <span className="eyebrow">Salvate</span>
-              <span className="badge-count">{taskVisibili.length}</span>
-            </div>
+            <h2>Gestione delle task</h2>
               <ul className="lista-task">
-                {taskVisibili.map((task) => (
+                {taskVisibili.slice(0, 5).map((task) => (
                     <li key={task._id} className="task">
                       <p className="testo">{task.testo}</p>
 
                       {task.categoria && <p className="categoria">{task.categoria}</p>}
+
+                      {task.data && (
+                        <p className="task-data">
+                          📅 {new Date(task.data).toLocaleDateString('it-IT', { weekday: 'short', day: 'numeric', month: 'long' })}
+                        </p>
+                      )}
+
                       <div className="task-azioni">
                         <label>
                           <input
@@ -247,9 +308,11 @@ const matchCategoria = categorySelected === "" || task.categoria === categorySel
                           />
                           Completata
                         </label>
-                        <button onClick={() => updateTask(task._id, { daGestire: false})}>Segna gestita</button>
-                        <button onClick={() => openEdit(task)}>✏️ Modifica</button>
-                        <button onClick={() => deleteTask(task._id)}>Elimina 🗑️</button>
+                       <div className='btn-task'>
+                        <button className='btn-edit' onClick={() => openEdit(task)}>Modifica</button>
+                        <button className='btn-delete' onClick={() => deleteTask(task._id)}>Elimina</button>
+                        </div>
+                        
                       </div>
                     </li>
                   ))}
@@ -259,70 +322,35 @@ const matchCategoria = categorySelected === "" || task.categoria === categorySel
       
 
         <Calendar
-          className= "calendario" 
           value={giornoSelezionato}
-          onChange={(value) => setGiornoSelezionato(value as Date)}/>
+          onChange={(value) => setGiornoSelezionato(value as Date)}
+          tileContent={({ date, view }) => {
+            if (view !== 'month') return null
+            const haTask = tasks.some(
+              (t) => t.data && new Date(t.data).toDateString() === date.toDateString()
+            )
+            return haTask ? <span className="punto-task"></span> : null
+          }}
+        />
         </section>
         
       <main>
         <section className='alg-cattura-tasks'>
-          <div className="cattura">
-            <span className="eyebrow">Cattura</span>
-            <h2>Nuovo pensiero</h2>
+          <h2>Nuovo pensiero</h2>
+          <button className="btn-hero" onClick={() => setModaleCattura(true)}></button>
+          <p>premi invio oppure barra spaziatrice per iniziare a registrare</p>
 
-            {tasks.filter((task) => task.daGestire).length > 0 && (
-              <p>{tasks.filter((task) => task.daGestire).length} note da gestire</p>
-            )}
-
-            <div className="riga">
-              <label htmlFor="testo-task">Testo</label>
-              <textarea
-                id="testo-task"
-                value={testo}
-                onChange={(e) => setTesto(e.target.value)}
-              />
-            </div>
-
-            <div className="riga">
-              <label htmlFor="categoria-task">Categoria (scegline una o creane una nuova)</label>
-              <input
-                id="categoria-task"
-                value={newCategory}
-                list="categorie"
-                placeholder='Non è obbligatoria, può rimanere un pensiero libero'
-                onChange={(e) => setNewCategory(e.target.value)}
-              />
-              
-              <datalist id="categorie">
-                {categorieEsistenti.map((cat) => (
-                  <option key={cat} value={cat} />
-                ))}
-              </datalist>
-            </div>
-          </div>
-
-          <aside>
-            <div className="riga">
-              <button
-                className={inAscolto ? 'registrando' : ''}
-                onClick={inAscolto ? fermaAscolto : avviaAscolto}
-              >
-                {inAscolto ? 'Stoppa registrazione' : 'Parla qua'}
-              </button>
-            </div>
-
-            {errore && <p className="errore">{errore}</p>}
-
-            <div className="riga">
-              <button className='salva-task-ascoltata' onClick={createTask}>Salva</button>
-            </div>
-          </aside>
         </section>
 
           <div className='alg-tasks-salvate'>
-            <h2>Pensieri e idee del giorno</h2>
+            <div className='alg-title-order'>
+              <h2>Pensieri e idee del giorno</h2>
+              <button onClick={() => setOrdine(ordine === 'recenti' ? 'vecchie' : 'recenti')}>
+                {ordine === 'recenti' ? 'Più recenti' : 'Più vecchie'}
+              </button>
+            </div>
+
             <ul>
-              {/* <button onClick={() => setOrdine(ordine === 'recenti' ? 'vecchie' : 'recenti')}>Ordine Descrescente</button> */}
               {tasks.filter((task) => {
                   const taskDaySelected = new Date(task.createdAt).toDateString() === giornoSelezionato.toDateString()
                   return taskDaySelected
@@ -337,31 +365,99 @@ const matchCategoria = categorySelected === "" || task.categoria === categorySel
             </ul>
 
             <div className="chat-actions">
-              <button onClick={() => setOrdine(ordine === 'recenti' ? 'vecchie' : 'recenti')}>
-                {ordine === 'recenti' ? 'Più recenti' : 'Più vecchie'}
-              </button>
-              <button onClick={readingTask}>Ascolta</button>
+              <button className='btn-edit' onClick={readingTask}>Ascolta le task</button>
+              <button className='btn-delete' onClick={togglePausa}>{inPausa ? 'Riprendi' : 'Pausa'}</button>
             </div>
 
           </div>
         </main>
 
+    {modaleCattura && (
+      <div className="modale-overlay" onClick={() => setModaleCattura(false)}>
+        <div className="modale" onClick={(e) => e.stopPropagation()}>
+          <h3>Nuovo pensiero</h3>
+
+          <button
+            className={inAscolto ? 'registrando' : ''}
+            onClick={inAscolto ? fermaAscolto : avviaAscolto}
+          >
+            {inAscolto ? 'Stoppa registrazione' : 'Parla'}
+          </button>
+
+          {errore && <p className="errore">{errore}</p>}
+
+          <label className="modale-campo">
+            <span>Testo</span>
+            <textarea value={testo} onChange={(e) => setTesto(e.target.value)} />
+          </label>
+
+          <label className="modale-campo">
+            <span>Categoria</span>
+            <input
+              value={newCategory}
+              list="categorie"
+              placeholder="Non è obbligatoria, può rimanere un pensiero libero"
+              onChange={(e) => setNewCategory(e.target.value)}
+            />
+          </label>
+
+          <div className="modale-azioni">
+            <div className="modale-azioni-dx">
+              <button className="btn-annulla" onClick={() => setModaleCattura(false)}>Annulla</button>
+              <button className="btn-salva" onClick={createTask}>Salva</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+
       {taskInModifica && (
         <div className="modale-overlay" onClick={closeEdit}>
           <div className="modale" onClick={(e) => e.stopPropagation()}>
             <h3>Modifica task</h3>
-            <input
-              value={testoModifica}
-              onChange={(e) => setTestoModifica(e.target.value)}
-            />
-            <input
-              value={modificaCategoria}
-              list="categorie"
-              onChange={(e) => setModificaCategoria(e.target.value)}
-            />
+
+            <label className="modale-campo">
+              <span>Testo</span>
+              <textarea
+                value={testoModifica}
+                onChange={(e) => setTestoModifica(e.target.value)}
+              />
+            </label>
+
+            <label className="modale-campo">
+              <span>Categoria</span>
+              <input
+                value={modificaCategoria}
+                list="categorie"
+                onChange={(e) => setModificaCategoria(e.target.value)}
+              />
+            </label>
+
+            <label className="modale-campo">
+              <span>Data programmata</span>
+              <input
+                type="date"
+                value={dataModifica}
+                onChange={(e) => setDataModifica(e.target.value)}
+              />
+            </label>
+
             <div className="modale-azioni">
-              <button onClick={saveEdit}>Salva</button>
-              <button onClick={closeEdit}>Annulla</button>
+              <button
+                className="btn-elimina"
+                onClick={() => {
+                  if (window.confirm('Eliminare questo pensiero?')) {
+                    deleteTask(taskInModifica._id)
+                    closeEdit()
+                  }
+                }}
+              >
+                Elimina
+              </button>
+              <div className="modale-azioni-dx">
+                <button className="btn-annulla" onClick={closeEdit}>Annulla</button>
+                <button className="btn-salva" onClick={saveEdit}>Salva</button>
+              </div>
             </div>
           </div>
         </div>
