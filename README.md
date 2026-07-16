@@ -6,6 +6,19 @@ App full-stack che trasforma la voce in appunti. Non è un'agenda con scadenze: 
 
 ---
 
+## 🔗 Demo live
+
+### 👉 **(https://INSERISCI-QUI-URL-VERCEL.vercel.app)**
+
+---
+
+## 📸 Screenshot
+
+(client/img/screen-dashboard.png)
+
+
+---
+
 ## ✨ Funzionalità
 
 ### 🎤 Cattura
@@ -97,7 +110,6 @@ Crea un file **`server/.env`**:
 PORT=3000
 MONGODB_URI=mongodb+srv://<utente>:<password>@<cluster>.mongodb.net/voice_todo
 ```
-> ⚠️ Il `.env` è escluso dal versionamento: non committare mai le credenziali.
 
 ### 3. Configura il frontend
 ```bash

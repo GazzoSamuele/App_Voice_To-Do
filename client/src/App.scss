@@ -31,7 +31,7 @@ body {
   align-items: stretch;
   height: 100vh;
   padding: $padding;
-  width: 90%;
+  width: 95%;
   margin: 0 auto;
 }
 
@@ -497,7 +497,7 @@ h3 {
     flex: 1 1 auto;
     height: 100%;
     grid-auto-flow: row;
-    justify-items: end;
+    justify-items: start;
 
     li {
       align-self: flex-start;
@@ -507,7 +507,7 @@ h3 {
       background: $element;
       border: 1px solid rgba(255, 255, 255, 0.14);
       border-radius: $radius;
-      font-size: 14px;
+      font-size: 1rem;
       line-height: 1.4;
     }
   }
@@ -678,6 +678,9 @@ button {
   #root {
     width: 92%;
   }
+  .task{
+    height: 100%;
+  }
   .react-calendar__month-view__days {
     grid-auto-rows: 92px;
     gap: 16px;
@@ -689,6 +692,9 @@ button {
     grid-auto-rows: 84px;
     gap: 14px;
   }
+  .task{
+    height: 100%;
+  }
   .pannello-cerca-categorie {
     flex: 0 0 210px;
   }
@@ -698,6 +704,9 @@ button {
   #root {
     width: 94%;
     gap: 14px;
+  }
+  .task{
+    height: 100%;
   }
   .react-calendar__month-view__days {
     grid-auto-rows: 74px;
@@ -723,6 +732,9 @@ button {
     flex: 1 1 auto;
     width: 100%;
   }
+  .task{
+    height: 100%;
+  }
   .react-calendar {
     flex: 0 0 auto;
   }
@@ -744,6 +756,9 @@ button {
   .pannello-cerca-categorie {
     flex: 1 1 auto;
     width: auto;
+  }
+  .task{
+    height: 100%;
   }
   .alg-cattura-tasks {
     flex-direction: column;
@@ -774,6 +789,7 @@ button {
   }
   .task {
     gap: 14px;
+    height: 100%;
   }
   .task-azioni {
     gap: 12px;
@@ -816,6 +832,9 @@ button {
     width: 150px !important;
     height: 150px !important;
   }
+  .task{
+    height: 100%;
+  }
   .alg-tasks-salvate .chat-actions {
     flex-direction: column;
   }
@@ -835,6 +854,7 @@ button {
   .task .testo {
     font-size: 1.05rem;
   }
+  
 }
 
 @media (max-width: 436px) {
@@ -862,6 +882,9 @@ button {
   .react-clock {
     width: 130px !important;
     height: 130px !important;
+  }
+  .task{
+    height: 100%;
   }
   .task-azioni {
     gap: 8px;
@@ -894,6 +917,9 @@ button {
   .react-clock {
     width: 115px !important;
     height: 115px !important;
+  }
+  .task{
+    height: 100%;
   }
   .categoria,
   .task-data {

@@ -249,6 +249,44 @@ const matchCategoria = categorySelected === "" || task.categoria === categorySel
           <option key={cat} value={cat} />
         ))}
       </datalist>
+    
+    <main>
+        <section className='alg-cattura-tasks'>
+          <h2>Nuovo pensiero</h2>
+          <button className="btn-hero" onClick={() => setModaleCattura(true)}></button>
+          <p>premi invio oppure barra spaziatrice per iniziare a registrare</p>
+
+        </section>
+
+          <div className='alg-tasks-salvate'>
+            <div className='alg-title-order'>
+              <h2>Pensieri e idee del giorno</h2>
+              <button onClick={() => setOrdine(ordine === 'recenti' ? 'vecchie' : 'recenti')}>
+                {ordine === 'recenti' ? 'Più recenti' : 'Più vecchie'}
+              </button>
+            </div>
+
+            <ul>
+              {tasks.filter((task) => {
+                  const taskDaySelected = new Date(task.createdAt).toDateString() === giornoSelezionato.toDateString()
+                  return taskDaySelected
+                })
+                .sort((a, b) => {
+                  const diff = new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+                  return ordine === 'recenti' ? diff : -diff
+                })
+                .map((task) => (
+                  <li key={task._id}>{task.testo}</li>
+                ))}
+            </ul>
+
+            <div className="chat-actions">
+              <button className='btn-edit' onClick={readingTask}>Ascolta le task</button>
+              <button className='btn-delete' onClick={togglePausa}>{inPausa ? 'Riprendi' : 'Pausa'}</button>
+            </div>
+
+          </div>
+        </main>
 
     <section className='alg-main'>
       <div className='alg-panel-calendario'>
@@ -333,44 +371,6 @@ const matchCategoria = categorySelected === "" || task.categoria === categorySel
           }}
         />
         </section>
-        
-      <main>
-        <section className='alg-cattura-tasks'>
-          <h2>Nuovo pensiero</h2>
-          <button className="btn-hero" onClick={() => setModaleCattura(true)}></button>
-          <p>premi invio oppure barra spaziatrice per iniziare a registrare</p>
-
-        </section>
-
-          <div className='alg-tasks-salvate'>
-            <div className='alg-title-order'>
-              <h2>Pensieri e idee del giorno</h2>
-              <button onClick={() => setOrdine(ordine === 'recenti' ? 'vecchie' : 'recenti')}>
-                {ordine === 'recenti' ? 'Più recenti' : 'Più vecchie'}
-              </button>
-            </div>
-
-            <ul>
-              {tasks.filter((task) => {
-                  const taskDaySelected = new Date(task.createdAt).toDateString() === giornoSelezionato.toDateString()
-                  return taskDaySelected
-                })
-                .sort((a, b) => {
-                  const diff = new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-                  return ordine === 'recenti' ? diff : -diff
-                })
-                .map((task) => (
-                  <li key={task._id}>{task.testo}</li>
-                ))}
-            </ul>
-
-            <div className="chat-actions">
-              <button className='btn-edit' onClick={readingTask}>Ascolta le task</button>
-              <button className='btn-delete' onClick={togglePausa}>{inPausa ? 'Riprendi' : 'Pausa'}</button>
-            </div>
-
-          </div>
-        </main>
 
     {modaleCattura && (
       <div className="modale-overlay" onClick={() => setModaleCattura(false)}>
