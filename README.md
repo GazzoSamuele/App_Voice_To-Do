@@ -6,9 +6,9 @@ App full-stack che trasforma la voce in appunti. Non è un'agenda con scadenze: 
 
 ---
 
-<!--## 🔗 Demo live
+## 🔗 Demo live
 
- ### 👉 **(https://INSERISCI-QUI-URL-VERCEL.vercel.app)** -->
+ <a href="https://app-voice-to-do.vercel.app/">
 
 ---
 
