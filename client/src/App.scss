@@ -29,7 +29,7 @@ body {
   display: flex;
   gap: $gap;
   align-items: stretch;
-  height: 100vh;
+  min-height: 100vh;
   padding: $padding;
   width: 95%;
   margin: 0 auto;
@@ -58,7 +58,15 @@ main {
 .alg-panel-calendario {
   display: flex;
   gap: $gap;
-  flex: 0 0 auto;
+  flex: 3 1 0;      // ~30% dell'altezza della colonna destra
+  min-height: 0;
+}
+
+// riga in alto a sinistra: viola (registra) + azzurro (cerca/filtro) affiancati
+.alg-top-row {
+  display: flex;
+  gap: $gap;
+  align-items: stretch;
 }
 
 .alg-tasks-salvate ul,
@@ -128,8 +136,8 @@ h3 {
   display: flex;
   flex-direction: column;
   gap: 30px;
-  flex: 0 0 230px;
-  width: fit-content;
+  flex: 1 1 0;
+  width: auto;
   padding: $padding;
   border-radius: $radius;
   background: linear-gradient(160deg, #9dbcf6, #92b4f4);
@@ -287,6 +295,7 @@ h3 {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  flex: 7 1 0;      // ~70% dell'altezza della colonna destra
   font-family: inherit;
 }
 
@@ -375,6 +384,7 @@ h3 {
 // ---- Cattura pensiero ----------------------------------
 .alg-cattura-tasks {
     display: flex;
+    flex: 1 1 0;
     gap: 18px;
     align-items: center;
     justify-content: space-evenly;
@@ -384,7 +394,7 @@ h3 {
     border-radius: 22px;
     box-shadow: 0 14px 36px rgba(35, 12, 51, 0.32);
     flex-direction: column;
-    height: 50%;
+    height: auto;
 
   h2{
     text-transform: uppercase;
@@ -681,6 +691,10 @@ button {
   .task{
     height: 100%;
   }
+  // colonna sinistra troppo stretta per viola+azzurro affiancati (orologio 190px) → li impilo
+  .alg-top-row {
+    flex-direction: column;
+  }
   .react-calendar__month-view__days {
     grid-auto-rows: 92px;
     gap: 16px;
@@ -695,9 +709,6 @@ button {
   .task{
     height: 100%;
   }
-  .pannello-cerca-categorie {
-    flex: 0 0 210px;
-  }
 }
 
 @media (max-width: 1220px) {
@@ -711,9 +722,6 @@ button {
   .react-calendar__month-view__days {
     grid-auto-rows: 74px;
     gap: 12px;
-  }
-  .pannello-cerca-categorie {
-    flex: 0 0 195px;
   }
   .react-clock {
     width: 150px !important;
@@ -737,6 +745,9 @@ button {
   }
   .react-calendar {
     flex: 0 0 auto;
+  }
+  .alg-panel-calendario {
+    flex: 0 0 auto;   // in colonna niente 30/70: altezza naturale, così non collassa
   }
   .lista-task {
     max-height: 340px;

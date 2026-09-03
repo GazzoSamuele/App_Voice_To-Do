@@ -251,12 +251,42 @@ const matchCategoria = categorySelected === "" || task.categoria === categorySel
       </datalist>
     
     <main>
+      <div className='alg-top-row'>
         <section className='alg-cattura-tasks'>
           <h2>Nuovo pensiero</h2>
           <button className="btn-hero" onClick={() => setModaleCattura(true)}></button>
           <p>premi invio oppure barra spaziatrice per iniziare a registrare</p>
 
         </section>
+
+        <div className="pannello-cerca-categorie">
+          <Clock value={ora} size={190} renderNumbers={true} />
+          <h2>Le tue task</h2>
+          <div className="riga">
+            <label htmlFor="ricerca">Cerca</label>
+            <input
+              id="ricerca"
+              type="search"
+              value={ricerca}
+              onChange={(e) => setRicerca(e.target.value)}
+            />
+          </div>
+
+          <select
+            value={categorySelected}
+            onChange={(e) => setNewCategorySelected(e.target.value)}
+          >
+            <option value="">Tutte le categorie</option>
+            {categorieEsistenti.map((cat) => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
+
+          <div className="conta-task">
+            <strong>{taskVisibili.length}</strong> task totali
+          </div>
+        </div>
+      </div>
 
           <div className='alg-tasks-salvate'>
             <div className='alg-title-order'>
@@ -290,42 +320,10 @@ const matchCategoria = categorySelected === "" || task.categoria === categorySel
 
     <section className='alg-main'>
       <div className='alg-panel-calendario'>
-        <div className="pannello-cerca-categorie">
-
-          <Clock value={ora} size={190} renderNumbers={true} />
-            <h2>Le tue task</h2>
-              <div className="riga">
-                <label htmlFor="ricerca">Cerca</label>
-                <input
-                  id="ricerca"
-                  type="search"
-                  value={ricerca}
-                  onChange={(e) => setRicerca(e.target.value)}
-                />
-              </div>
-            
-                <select
-                    value={categorySelected}
-                    onChange={(e) => setNewCategorySelected(e.target.value)}
-                >
-                  <option value="">Tutte le categorie</option>
-                    {categorieEsistenti.map((cat) => (
-                      <option 
-                        key={cat}
-                        value={cat}
-                        >{cat}</option>
-                    ))}
-                </select>
-
-                <div className="conta-task">
-                  <strong>{taskVisibili.length}</strong> task totali
-                </div>
-              </div>
-
           <div className='panel-task-salvate'>
             <h2>Gestione delle task</h2>
               <ul className="lista-task">
-                {taskVisibili.slice(0, 5).map((task) => (
+                {taskVisibili.slice(0, 4).map((task) => (
                     <li key={task._id} className="task">
                       <p className="testo">{task.testo}</p>
 
