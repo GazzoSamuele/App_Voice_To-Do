@@ -8,7 +8,9 @@ App full-stack che trasforma la voce in appunti. Non è un'agenda con scadenze: 
 
 ## 🔗 Demo live
 
- <a href="https://app-voice-to-do.vercel.app/">
+<a href="https://app-voice-to-do.vercel.app/">🚀 Prova l'app</a>
+
+> ⏳ Il backend è sul piano gratuito di Render: la **prima apertura** dopo un po' di inattività richiede ~30-50 secondi per il risveglio, poi è immediata. Per la trascrizione vocale usa **Chrome** o **Edge**.
 
 ---
 
