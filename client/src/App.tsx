@@ -323,7 +323,7 @@ const matchCategoria = categorySelected === "" || task.categoria === categorySel
           <div className='panel-task-salvate'>
             <h2>Gestione delle task</h2>
               <ul className="lista-task">
-                {taskVisibili.slice(0, 4).map((task) => (
+                {taskVisibili.slice(0, 3).map((task) => (
                     <li key={task._id} className="task">
                       <p className="testo">{task.testo}</p>
 

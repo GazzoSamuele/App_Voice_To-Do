@@ -58,11 +58,10 @@ main {
 .alg-panel-calendario {
   display: flex;
   gap: $gap;
-  flex: 3 1 0;      // ~30% dell'altezza della colonna destra
+  flex: 3 1 0;      
   min-height: 0;
 }
 
-// riga in alto a sinistra: viola (registra) + azzurro (cerca/filtro) affiancati
 .alg-top-row {
   display: flex;
   gap: $gap;
@@ -166,9 +165,6 @@ h3 {
   margin: 0;
   padding: 2px;
   display: grid;
-  // auto-fit + min 200px: il browser mette quante colonne ci stanno,
-  // ma una card non scende MAI sotto 200px → mai testo illeggibile.
-  // min(200px, 100%) evita l'overflow quando il pannello è più stretto di 200px.
   grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
   gap: 13px;
   overflow-y: auto;
@@ -177,11 +173,14 @@ h3 {
 
 }
 .task-data {
-  font-size: 0.8rem;
-  font-family: $font-mono;
-  color: $element;
-  align-self: flex-start;
-  background-color: $background;
+      font-size: 0.8rem;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    color: white;
+    align-self: flex-start;
+    background-color: #230c33;
+    padding: 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
 }
 .task {
     display: flex;
@@ -194,7 +193,7 @@ h3 {
     color: #ffffff;
     box-shadow: 0 4px 14px rgba(35, 12, 51, 0.28);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
-    height: auto;
+    height: 100%;   // riempie l'altezza della riga → sfrutta il rettangolo marrone
 
   &:hover {
     transform: translateY(-3px);
@@ -226,7 +225,7 @@ h3 {
   background: $background;
   border: 1px solid rgba(146, 180, 244, 0.4);
   border-radius: 999px;
-  padding: 3px 10px;
+  padding: 10px;
 }
 
 .task-azioni {
@@ -353,7 +352,6 @@ h3 {
 
 .react-calendar__month-view__days {
   display: grid !important;
-  // minmax(0, 1fr) = le colonne possono restringersi sotto il contenuto → il calendario non sfonda mai
   grid-template-columns: repeat(7, minmax(0, 1fr));
   grid-auto-rows: 110px;
   gap: $gap;
