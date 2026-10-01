@@ -1,36 +1,39 @@
-import "dotenv/config"
+import "dotenv/config";
 
-import tasksRouter from "./routes/tasks"
+import tasksRouter from "./routes/tasks";
+import { connectDB } from "./db";
+import cors from "cors";
+import express from "express";
 
-import cors from "cors"
-import mongoose from "mongoose"
-import express from "express"
+const app = express();
+app.use(cors());
 
-const app = express()
-//MIDDLEWARE
+app.use(express.json());
 
-app.use(cors())
+app.use("/api", async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (errore) {
+    console.error("❌ Database non raggiungibile:", errore);
+    res
+      .status(503)
+      .json({ errore: "Database non raggiungibile, riprova tra poco" });
+  }
+});
 
-app.use(express.json())
+app.use("/api/tasks", tasksRouter);
 
-app.use("/api/tasks", tasksRouter)
+const PORT = process.env.PORT || 3000;
 
-const PORT = process.env.PORT || 3000
-const MONGODB_URI = process.env.MONGODB_URI
+app.get("/", (req, res) => {
+  res.send("benvenuti sulla mia applicazione");
+});
 
-if (!MONGODB_URI) {
-  throw new Error('MONGODB_URI manca nel file .env')
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server in ascolto su http://localhost:${PORT}`);
+  });
 }
 
-mongoose.connect(MONGODB_URI)
-  .then(() => console.log('Connesso a MongoDB ✅'))
-  .catch((err) => console.error('Errore connessione MongoDB:', err))
-
-app.get("/", (req,res) => {
-    res.send( "benvenuti sulla mia applicazione")
-})
-
-app.listen(PORT, () => {
-    console.log(`server pronto sulla porta http://localhost:${PORT}`)
-})
-
+export default app;
