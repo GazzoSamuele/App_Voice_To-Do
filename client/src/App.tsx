@@ -256,6 +256,10 @@ const matchCategoria = categorySelected === "" || task.categoria === categorySel
           <h2>Nuovo pensiero</h2>
           <button className="btn-hero" onClick={() => setModaleCattura(true)}></button>
           <p>premi invio oppure barra spaziatrice per iniziare a registrare</p>
+          <p className="avviso-demo">
+            Demo pubblica: i pensieri salvati sono visibili a tutti i visitatori, non dettare dati personali.{' '}
+            <a href="/privacy.html">Privacy</a>
+          </p>
 
         </section>
 
@@ -381,6 +385,11 @@ const matchCategoria = categorySelected === "" || task.categoria === categorySel
           >
             {inAscolto ? 'Stoppa registrazione' : 'Parla'}
           </button>
+
+          <p className="avviso-voce">
+            La trascrizione la fa il servizio vocale del browser: in Chrome l'audio viene inviato
+            a Google, in Edge a Microsoft. Il testo salvato è visibile a tutti i visitatori della demo.
+          </p>
 
           {errore && <p className="errore">{errore}</p>}
 

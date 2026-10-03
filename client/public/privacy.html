@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Privacy | Voice To-Do</title>
+    <style>
+      :root {
+        --viola: #230c33;
+        --testo-tenue: #4b3c57;
+        --carta: #ffffff;
+        --bordo: rgba(35, 12, 51, 0.12);
+        --accento: #8a5440;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(160deg, #eef2f7, #d9e2ec);
+        color: var(--viola);
+        font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+        line-height: 1.65;
+      }
+      main {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 48px 20px 64px;
+      }
+      a { color: var(--accento); }
+      .indietro { display: inline-block; margin-bottom: 32px; font-weight: 600; }
+      h1 { margin: 0 0 4px; font-size: 2rem; line-height: 1.2; }
+      .aggiornato { margin: 0 0 32px; color: var(--testo-tenue); font-size: 0.9rem; }
+      h2 { margin: 36px 0 8px; font-size: 1.15rem; }
+      p, li { color: var(--testo-tenue); }
+      strong { color: var(--viola); }
+      ul { padding-left: 20px; }
+      li + li { margin-top: 6px; }
+      .riquadro {
+        padding: 16px 18px;
+        border: 1px solid var(--bordo);
+        border-radius: 16px;
+        background: var(--carta);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <a class="indietro" href="/">← Torna a Voice To-Do</a>
+      <h1>Informativa privacy</h1>
+      <p class="aggiornato">Ultimo aggiornamento: 3 ottobre 2026</p>
+
+      <p class="riquadro">
+        Voice To-Do è un <strong>progetto dimostrativo personale</strong>, pubblicato come parte
+        del mio portfolio. È una <strong>demo pubblica senza account</strong>: i pensieri salvati
+        sono <strong>visibili a tutti i visitatori</strong>, quindi non dettare né scrivere dati
+        personali. Non ha scopi commerciali, non mostra pubblicità e non usa strumenti di
+        statistica o di profilazione.
+      </p>
+
+      <h2>Titolare del trattamento</h2>
+      <p>
+        Samuele Gazzo — email:
+        <a href="mailto:samuelegazzo69@gmail.com">samuelegazzo69@gmail.com</a>
+      </p>
+
+      <h2>Quali dati vengono trattati</h2>
+      <ul>
+        <li>
+          <strong>Dati tecnici di navigazione</strong>: indirizzo IP, tipo di browser, data e ora
+          delle richieste, registrati automaticamente nei log del servizio di hosting.
+        </li>
+        <li>
+          <strong>I pensieri che salvi</strong>: testo, categoria, data ed eventuale stato
+          "completata". Vengono salvati nel database della demo, senza alcun legame con la tua
+          identità.
+        </li>
+      </ul>
+
+      <h2>Microfono e riconoscimento vocale</h2>
+      <p>
+        La trascrizione usa il <strong>riconoscimento vocale integrato nel browser</strong> (Web
+        Speech API). L'app non registra né salva l'audio, ma il browser lo invia al proprio
+        servizio di trascrizione: in <strong>Chrome</strong> a Google, in <strong>Edge</strong> a
+        Microsoft. Il microfono si attiva solo quando premi "Parla" e dopo che hai dato il
+        permesso al browser. Anche la lettura ad alta voce usa le voci del browser, che in alcuni
+        casi sono fornite online dagli stessi servizi.
+      </p>
+
+      <h2>Cookie e memoria del browser</h2>
+      <p>
+        L'app <strong>non usa cookie</strong> e non salva dati nella memoria del browser: non
+        serve alcun consenso.
+      </p>
+
+      <h2>Perché vengono trattati</h2>
+      <p>
+        Per far funzionare la demo e garantirne la sicurezza (legittimo interesse, art. 6.1.f
+        GDPR).
+      </p>
+
+      <h2>Chi tratta i dati per conto del titolare</h2>
+      <ul>
+        <li><strong>Vercel Inc.</strong> — hosting del sito e del server.</li>
+        <li><strong>MongoDB Inc.</strong> (MongoDB Atlas) — database dei pensieri.</li>
+        <li>
+          <strong>Google</strong> o <strong>Microsoft</strong>, solo per il riconoscimento vocale,
+          a seconda del browser che usi.
+        </li>
+      </ul>
+      <p>
+        Questi fornitori hanno sede negli Stati Uniti: i trasferimenti avvengono con le garanzie
+        previste dal GDPR (EU-US Data Privacy Framework o clausole contrattuali standard). I
+        caratteri tipografici sono ospitati sul sito stesso: aprendo l'app il tuo browser non
+        contatta Google.
+      </p>
+
+      <h2>Per quanto tempo</h2>
+      <p>
+        I pensieri restano finché qualcuno non li elimina dalla demo: puoi cancellare i tuoi in
+        qualsiasi momento con il pulsante "Elimina", oppure chiedermelo via email. I log tecnici
+        vengono conservati per i tempi previsti dal servizio di hosting.
+      </p>
+
+      <h2>I tuoi diritti</h2>
+      <p>
+        Puoi chiedere in qualsiasi momento di accedere ai tuoi dati, correggerli, cancellarli,
+        limitarne il trattamento, opporti o riceverli in un formato leggibile (artt. 15-22 GDPR),
+        scrivendo all'email del titolare. Hai anche il diritto di presentare reclamo al
+        <a href="https://www.garanteprivacy.it" rel="noopener">Garante per la protezione dei dati personali</a>.
+      </p>
+    </main>
+  </body>
+</html>
